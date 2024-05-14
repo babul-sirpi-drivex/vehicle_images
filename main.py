@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import zipfile
 import io
+from PIL import Image
 
 
 def fetch_image_urls(registration_number):
@@ -45,11 +46,16 @@ def main():
                 zip_buffer, "w", zipfile.ZIP_DEFLATED
             ) as zip_file:
                 for i, url in enumerate(image_urls):
-                    filename = f"{query}_{i+1}.webp"
+                    filename = f"{query}_{i+1}.png"  # Change the file extension to .png
                     response = requests.get(url)
                     if response.status_code == 200:
-                        # Write the file to the zip
-                        zip_file.writestr(filename, response.content)
+                        # Convert the image from webp to png
+                        image = Image.open(io.BytesIO(response.content))
+                        png_buffer = io.BytesIO()
+                        image.save(png_buffer, format="PNG")
+                        png_buffer.seek(0)
+                        # Write the converted image to the zip
+                        zip_file.writestr(filename, png_buffer.getvalue())
                     else:
                         st.write(
                             f"Failed to download {filename}. Status code: {response.status_code}"
