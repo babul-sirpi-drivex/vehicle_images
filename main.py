@@ -46,13 +46,13 @@ def main():
                 zip_buffer, "w", zipfile.ZIP_DEFLATED
             ) as zip_file:
                 for i, url in enumerate(image_urls):
-                    filename = f"{query}_{i+1}.png"  # Change the file extension to .png
+                    filename = f"{query}_{i+1}.jpeg"  # Change the file extension to .png
                     response = requests.get(url)
                     if response.status_code == 200:
                         # Convert the image from webp to png
                         image = Image.open(io.BytesIO(response.content))
                         png_buffer = io.BytesIO()
-                        image.save(png_buffer, format="PNG")
+                        image.save(png_buffer, format="JPEG")
                         png_buffer.seek(0)
                         # Write the converted image to the zip
                         zip_file.writestr(filename, png_buffer.getvalue())
