@@ -38,6 +38,11 @@ def main():
     if submit:
         image_urls = fetch_image_urls(query)
         if image_urls:
+            with st.container():
+                st.image(
+                    image_urls,
+                    width=100,  # Manually Adjust the width of the image as per requirement
+                )
             st.write(f"Found {len(image_urls)} images for '{query}':")
 
             # Create a bytes buffer for the zip file
